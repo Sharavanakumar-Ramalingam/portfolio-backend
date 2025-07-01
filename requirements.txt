@@ -1,4 +1,4 @@
 flask
 flask-cors
-groq-sdk
 python-dotenv
+git+https://github.com/groq/groq-sdk.git
