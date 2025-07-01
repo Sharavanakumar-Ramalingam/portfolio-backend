@@ -1,33 +1,37 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from groq import Groq
+import os
 
 app = Flask(__name__)
-CORS(app)
+CORS(app)  # Enable Cross-Origin Resource Sharing
 
-# ✅ Your Groq API Key
-groq_client = Groq(api_key="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")
+# ✅ Use Groq API key from environment variable
+groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 @app.route('/chat', methods=['POST'])
 def chat():
     try:
         data = request.get_json()
         messages = data.get("messages", [])
+        if not messages:
+            return jsonify({"error": "No messages provided"}), 400
 
         completion = groq_client.chat.completions.create(
-            model="llama3-70b-8192",
+            model="llama3-70b-8192",  # or your preferred model
             messages=messages,
             temperature=1,
             max_tokens=1024,
             top_p=1
         )
 
-        # ✅ Convert to JSON-serializable dictionary
+        # ✅ Return as a serializable JSON response
         return jsonify(completion.model_dump())
 
     except Exception as e:
-        print("ERROR:", str(e))
+        print("Error:", str(e))
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))  # Use Render's dynamic port
+    app.run(host="0.0.0.0", port=port)
