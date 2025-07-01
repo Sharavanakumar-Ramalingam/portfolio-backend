@@ -1,0 +1,4 @@
+flask
+flask-cors
+groq-sdk
+python-dotenv
