@@ -7,7 +7,7 @@ app = Flask(__name__)
 CORS(app)  # Enable Cross-Origin Resource Sharing
 
 # ✅ Use Groq API key from environment variable
-groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+groq_client = Groq(api_key="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")
 
 @app.route('/chat', methods=['POST'])
 def chat():
